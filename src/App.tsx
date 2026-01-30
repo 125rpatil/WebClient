@@ -51,7 +51,7 @@ function App() {
   return (
     <>
         <div id= "searchButton">
-            <input id= "search" placeholder="Search" />
+            <input id= "search" placeholder="What to Add" />
             <button id="button1" onClick={handlePost}>Add</button>
         </div>
 
