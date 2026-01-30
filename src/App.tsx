@@ -5,7 +5,7 @@ function App() {
   const [results, setData] = useState([])
 
     useEffect(() => {
-        fetch('http://localhost:3000')
+        fetch('https://server-7b8p.onrender.com')
         .then(res => res.json())
         .then(data => setData(Array.isArray(data.message) ? data.message : []))
             .catch(err => console.log(err))
@@ -13,7 +13,7 @@ function App() {
 
   const handlePost = () =>{
       const value = (document.getElementById("search") as HTMLInputElement).value
-      fetch('http://localhost:3000/', {
+      fetch('https://server-7b8p.onrender.com', {
           method: 'POST',
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify({newMessage: value}),
@@ -25,7 +25,7 @@ function App() {
   const handlePut = () =>{
       const value = (document.getElementById("searchchanger") as HTMLInputElement).value
       const index = Number((document.getElementById("searchchangerindex") as HTMLInputElement).value)
-      fetch('http://localhost:3000/', {
+      fetch('https://server-7b8p.onrender.com', {
           method: 'PUT',
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify({newMessage: value, index}),
@@ -36,7 +36,7 @@ function App() {
   }
   const handleDelete = () =>{
       const index = Number((document.getElementById("deleteindex") as HTMLInputElement).value)
-      fetch('http://localhost:3000/', {
+      fetch('https://server-7b8p.onrender.com', {
           method: 'DELETE',
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify({index}),
