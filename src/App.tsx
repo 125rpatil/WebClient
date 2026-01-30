@@ -2,51 +2,79 @@ import {useEffect, useState} from 'react'
 import './App.css'
 
 function App() {
-  const [data, setData] = useState([])
-    const[stringData, setStringData] = useState('')
+  const [results, setData] = useState([])
 
-
-    useEffect(()=>{
-        const API_URL = "http://localhost:3000"
-
-        fetch(API_URL)
-        .then(res => {
-            if(!res.ok){
-                throw new Error(`HTTP error: ${res.status}`);
-            }
-            return res.json()
-        })
-            .then((data) => {
-            })
-        setData(data)
-            })
     useEffect(() => {
-        const API_URL = "http://localhost:3000"
-        fetch(API_URL,{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
-    });
+        fetch('http://localhost:3000')
+        .then(res => res.json())
+        .then(data => setData(Array.isArray(data.message) ? data.message : []))
+            .catch(err => console.log(err))
+    }, []);
+
+  const handlePost = () =>{
+      const value = (document.getElementById("search") as HTMLInputElement).value
+      fetch('http://localhost:3000/', {
+          method: 'POST',
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({newMessage: value}),
+      })
+      .then(res => res.json())
+      .then(data => setData(Array.isArray(data.message) ? data.message : []))
+      .catch(err => console.log(err))
+  }
+  const handlePut = () =>{
+      const value = (document.getElementById("searchchanger") as HTMLInputElement).value
+      const index = Number((document.getElementById("searchchangerindex") as HTMLInputElement).value)
+      fetch('http://localhost:3000/', {
+          method: 'PUT',
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({newMessage: value, index}),
+      })
+      .then(res => res.json())
+      .then(data => setData(Array.isArray(data.message) ? data.message : []))
+      .catch(err => console.log(err))
+  }
+  const handleDelete = () =>{
+      const index = Number((document.getElementById("deleteindex") as HTMLInputElement).value)
+      fetch('http://localhost:3000/', {
+          method: 'DELETE',
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({index}),
+      })
+          .then(res => res.json())
+          .then(data => setData(Array.isArray(data.message) ? data.message : []))
+          .catch(err => console.log(err))
+  }
+
+
+
   return (
     <>
-        <ul>
-            {data.map((item, i) => (
-                <li key={i}>{item}</li>
-            ))}
-        </ul>
-        <div>
-            <input type='text' value={stringData}
-                onChange={(e) => setStringData(e.target.value)}>
-            </input>
-            <button type="button" value="Click Me"
-            onClick={() => {
-                data.push(stringData);
-                setData(data)
-            }}/>
+        <div id= "searchButton">
+            <input id= "search" placeholder="Search" />
+            <button id="button1" onClick={handlePost}>Add</button>
         </div>
+
+        <div id= "Putter">
+            <input id= "searchchanger" placeholder="Change Message" />
+            <input id= "searchchangerindex" placeholder=" at index" />
+            <button id="button2" onClick={handlePut}>Change</button>
+        </div>
+
+        <div id="deleter">
+            <input id = "deleteindex" placeholder= "Index to Delete" />
+            <button id="button3" onClick={handleDelete}>Delete</button>
+        </div>
+
+        <h2>
+            Current Message:
+        </h2>
+        <ul>
+            {Array.isArray(results) && results.map((msg,index) =>
+            < li key ={index}>{index}:{msg}</li>)}
+        </ul>
+
+
 
 
     </>
